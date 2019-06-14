@@ -1,0 +1,82 @@
+# This play relies on correctly configured variables for the template
+# templates/soa_template
+# Example included at bottom
+
+- name: Writing SOA configurations
+  template:
+    src: soa_template
+    dest: "/var/cache/bind/db.{{ item.soa }}"
+  with_items: "{{ soa_configs }}"
+  register: bind_config
+
+- name: Including zones in named.conf.local
+  blockinfile:
+    path: /etc/bind/named.conf.local
+    marker: "// -- ZONE {mark} ANSIBLE MANAGED BLOCK --"
+    block: |
+      {% for config in soa_configs %}
+      zone "{{ config.soa }}" in {
+      type master;
+      file "db.{{ config.soa }}";
+      };
+
+      {% endfor %}
+  register: bind_config
+
+- name: Restarting bind9 service if required
+  service:
+    state: restarted
+    name: bind9
+  when: bind_config.changed
+
+# Sample vars/main.yaml
+# domain: 'rcdt.net'
+#
+# time_to_live: '3h'
+# refresh_time: '3h'
+# retry_time: '1h'
+# expire_time: '1w'
+# neg_cache_time: '1d'
+#
+# soa_configs:
+#  - soa: 'rcdt.net'
+#    host_name: 'server'
+#    name_servers:
+#      - name: '{{ domain }}.'
+#        address: 'server.rcdt.net.'
+#    address_records:
+#      - name: 'server.{{ domain }}.'
+#        type: 'A'
+#        address: '192.168.1.11'
+#      - name: 'localhost.'
+#        type: 'A'
+#        address: '127.0.0.1'
+#      - name: 'gitlab.{{ domain }}.'
+#        type: 'A'
+#        address: '192.168.1.11'
+#      - name: 'wiki.{{ domain }}.'
+#        type: 'A'
+#        address: '192.168.1.12'
+#
+#  - soa: '1.168.192.in-addr.arpa'
+#    host_name: 'server'
+#    name_servers:
+#      - name: '1.168.192.in-addr.arpa.'
+#        address: 'server.{{ domain }}.'
+#    address_records:
+#      - name: '11.1.168.192.in-addr.arpa.'
+#        type: 'PTR'
+#        address: 'gitlab.{{ domain }}.'
+#      - name: '12.1.168.192.in-addr.arpa.'
+#        type: 'PTR'
+#        address: 'wiki.{{ domain }}.'
+#
+#  - soa: '0.0.127.in-addr.arpa'
+#    host_name: 'server'
+#    name_servers:
+#      - name: '0.0.127.in-addr.arpa.'
+#        address: 'server.rcdt.net.'
+#    address_records:
+#      - name: '1.0.0.127.in-addr.arpa.'
+#        type: 'PTR'
+#        address: 'localhost'

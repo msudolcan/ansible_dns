@@ -1,0 +1,12 @@
+- name: Modifying netplan configuration file
+  blockinfile:
+    path: /etc/netplan/50-vagrant.yaml
+    block: |
+      # This is a plcaeholder to preserve the indentation level
+            nameservers:
+              addresses: [192.168.1.10]
+  register: netplan_config
+
+- name: Applying netplan if required
+  shell: netplan apply
+  when: netplan_config.changed

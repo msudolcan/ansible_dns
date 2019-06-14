@@ -1,0 +1,20 @@
+- name: Copying default vagrant private key to use for ssh
+  copy:
+    src: id_rsa
+    dest: ~/.ssh/id_rsa
+    mode: '0600'
+
+- name: Modifying ansible.cfg to use Vagrant's private key for ssh
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    regexp: 'private_key_file = '
+    line: private_key_file = ~/.ssh/id_rsa
+  become: true
+
+- name: Modifying ansible.cfg to skip host key checking
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    regexp: '^#?host_key_checking = False'
+    line: host_key_checking = False
+    state: present
+  become: true

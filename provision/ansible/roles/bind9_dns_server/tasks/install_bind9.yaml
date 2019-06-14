@@ -1,0 +1,4 @@
+- name: Installling bind9 and bind9utils
+  apt:
+    name: [bind9, bind9utils]
+    state: present

@@ -1,0 +1,50 @@
+domain: 'rcdt.net'
+
+time_to_live: '3h'
+refresh_time: '3h'
+retry_time: '1h'
+expire_time: '1w'
+neg_cache_time: '1d'
+
+soa_configs:
+  - soa: 'rcdt.net'
+    host_name: 'server'
+    name_servers:
+      - name: '{{ domain }}.'
+        address: 'server.rcdt.net.'
+    address_records:
+      - name: 'server.{{ domain }}.'
+        type: 'A'
+        address: '192.168.1.11'
+      - name: 'localhost.'
+        type: 'A'
+        address: '127.0.0.1'
+      - name: 'gitlab.{{ domain }}.'
+        type: 'A'
+        address: '192.168.1.11'
+      - name: 'wiki.{{ domain }}.'
+        type: 'A'
+        address: '192.168.1.12'
+
+  - soa: '1.168.192.in-addr.arpa'
+    host_name: 'server'
+    name_servers:
+      - name: '1.168.192.in-addr.arpa.'
+        address: 'server.{{ domain }}.'
+    address_records:
+      - name: '11.1.168.192.in-addr.arpa.'
+        type: 'PTR'
+        address: 'gitlab.{{ domain }}.'
+      - name: '12.1.168.192.in-addr.arpa.'
+        type: 'PTR'
+        address: 'wiki.{{ domain }}.'
+
+  - soa: '0.0.127.in-addr.arpa'
+    host_name: 'server'
+    name_servers:
+      - name: '0.0.127.in-addr.arpa.'
+        address: 'server.rcdt.net.'
+    address_records:
+      - name: '1.0.0.127.in-addr.arpa.'
+        type: 'PTR'
+        address: 'localhost'

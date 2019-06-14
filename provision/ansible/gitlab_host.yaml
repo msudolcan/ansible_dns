@@ -1,0 +1,4 @@
+---
+- hosts: gitlab.rcdt.net
+  roles:
+    - gitlab_host

@@ -1,0 +1,12 @@
+---
+domain: 'rcdt.com'
+
+machines:
+  domain-controller:
+    ip: "192.168.1.10"
+  gitlab:
+    ip: "192.168.1.11"
+  wiki:
+    ip: "192.168.1.12"
+  develop:
+    ip: "192.168.1.100"

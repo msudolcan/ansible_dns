@@ -1,0 +1,2 @@
+- name: Inlcuding gitlab_host.yaml
+  include: gitlab_host.yaml

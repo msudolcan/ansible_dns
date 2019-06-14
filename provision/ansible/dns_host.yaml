@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  roles:
+    - bind9_dns_server
+    - dns_client
+    - ansible_runner

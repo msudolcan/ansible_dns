@@ -1,0 +1,7 @@
+- name: Including install_bind9 play
+  include: install_bind9.yaml
+  become: true
+
+- name: Including configure_bind9 play
+  include: configure_bind9.yaml
+  become: true

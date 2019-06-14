@@ -1,0 +1,23 @@
+$TTL {{ time_to_live }}
+{{ item.soa }}. IN SOA {{ item.host_name }}.{{ domain }}. hostmaster.{{ domain }}. (
+    3; Serial
+    {{ refresh_time }}; Refresh cache after 3 hours
+    {{ retry_time }}; Retry after 1 hour
+    {{ expire_time }}; Expire after 1 week
+    {{ neg_cache_time }}); Negative caching TTL of 1 day
+
+
+;
+; Name Servers
+;
+{% for record in item.name_servers %}
+{{ "%-32s" | format(record.name) }}IN  NS  {{ record.address }}
+{% endfor %}
+
+;
+; Host Addresses
+;
+
+{% for record in item.address_records %}
+{{ "%-32s" | format(record.name) }}IN  {{ "%-4s" | format(record.type) }}{{ record.address }}
+{% endfor %}

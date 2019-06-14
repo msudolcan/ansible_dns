@@ -1,0 +1,17 @@
+- name: Installing dependencies
+  apt:
+    name: [curl, openssh-server, ca-certificates, postfix]
+    state: present
+  become: true
+
+- name: Adding gitlab package repo
+  shell: curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+
+- name: Installing gitlab
+  apt:
+    name: gitlab-ee
+    state: present
+  environment:
+    EXTERNAL_URL: "http://gitlab.rcdt.net"
+  become: true
+

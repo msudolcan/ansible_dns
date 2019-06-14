@@ -1,0 +1,8 @@
+- name: Importing dns_host.yaml
+  import_playbook: dns_host.yaml
+
+- name: Importing dns_clients.yamnl
+  import_playbook: dns_clients.yaml
+
+- name: Imprting gitlab_hosts.yaml
+  import_playbook: gitlab_host.yaml

@@ -1,0 +1,5 @@
+ansible_clients:
+  - 'gitlab.rcdt.net'
+  - 'wiki.rcdt.net'
+
+gitlab_ip: 'gitlab.rcdt.net'
